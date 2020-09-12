@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Michael Hepfer">
+  <meta name="description" content="Unit 4 Homework, CS-240, Fall 1 2020, Park University">
+  <meta name="keywords" content="Unit 3, HTML">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michael Steven Home Furnishings - Homework 6 - Michael Hepfer</title>
+  <link rel="stylesheet" href="../css/default.css">
+  <style>
+    /* default paragraph style */
+    p {
+      background-color: papayawhip;
+      padding: 5px;
+      text-align: justify;
+      margin: 0px 20px;
+    }
+
+    /*aside for sales promotion */
+    aside {
+      float: right;
+      width: 150px;
+      margin: 5px 15px;
+      border-style: groove;
+      padding: 5px 15px;
+      background-color: white;
+    }
+
+    /* content layout table styling */ 
+    .table {
+      display: table;
+      padding-bottom: 20px;
+      margin: 20px; 
+    }
+    .row {display: table-row;}
+    .cell {
+      display: table-cell;
+      padding-left: 20px;
+      padding-right: 20px;
+      text-align: center;
+    }
+
+    /* iframe styling */
+    iframe {
+      border: none; 
+      overflow:hidden;
+      width: 100%;
+    }
+    div#iframe-div{
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    /* imagemap text formatting */
+    .span-title{
+      font-weight: bold;
+    }
+  </style>
+
+  <!-- imagemap javascript for showing message -->
+  <script>
+    function showMessage(title, detail){
+      var detailsBox;
+      detailsBox = document.getElementById("detials_box");
+      detailsBox.innerHTML = "<span class='span-title'>" + title + "</span><br>" + detail
+    }
+  </script>
+</head>
+
+<!-- 
+  Tags used: 
+    html, head, meta, title, header, body, footer, h1, h2, h3, p, hr, 
+    nav, div, span, img, a, aside, blockquote, iframe, map, area
+  Attributes used:
+    class, cite, alt, height, width, style, target, onmouseover, nohref
+-->
+<body>
+  <!-- ===========  Header =============== -->
+  <header class="container">
+    <aside>Phone: (512) 555-1212</aside> 
+    <h1>Michael Steven Home Furnishings</h1>
+    <!-- Tag Line -->
+    <blockquote class="catchPhrase"  cite="http://furnishings.michaelsteven.com">
+      Quality Crafted and Made to Last
+    </blockquote>
+    <hr>
+    <!-- Navigation -->
+    <nav>
+      <a href="homework2.html">Home</a> | 
+      <a href="homework7.html">Sofas & Chairs</a> | 
+      <a href="homework4.html">Stoves and Ranges</a> | 
+      <a href="homework5.html">Lighting</a> |
+      <a href="homework3.html">Locations</a> | 
+      <a href="homework6.html">Demos and Events</a>
+    </nav>
+  </header>
+  
+  <!-- ===============  CONTENT  ============= --> 
+  <div class="container" style="background-color:white;padding: 10px 0px; ">
+
+    <!-- page title -->
+    <h2 class="center">Sofas & Chairs</h2>
+
+    <!-- Sales Promotion on the right side -->
+    <aside>
+      Fall Seasonal Sale! <br>
+      <span style="color: red; font-weight: bold;">SAVE UP TO 50%</span><sup>1</sup>
+    </aside>
+
+    <!-- ============  BODY ================= -->
+
+    <!-- Signature Series -->
+    <h3>Yosemite Valley Wildlife Furnature Collection</h3>
+    <p>
+      Hand Crafted from kiln-dried hardwoods, this collection is upholstered in durable 
+      top-grain leather and mountain wildlife tapestry. Made to order in the USA from 
+      imported materials. Attached inside back cushions and reversible seat cushions. 
+      Available in custom sizes and designs. 
+    </p>
+
+    <!-- horzontal row of clickable images -->
+    <div class="table">
+      <div class="row">
+        <!-- default image, the living room suite -->
+        <div class="cell">
+          <a href="../images/sofas_and_chairs/yosemite-valley-wildlife-furniture-collection-3.jpg"
+             target="inline-frame">
+             <img src="../images/sofas_and_chairs/yosemite-valley-wildlife-furniture-collection-3.jpg"
+                  width="200" alt="suite"><br>Suite
+          </a> 
+        </div>
+        <!-- the ottoman -->
+        <div class="cell">
+          <a href="../images/sofas_and_chairs/ottoman2.jpg" target="inline-frame">
+            <img src="../images/sofas_and_chairs/ottoman2.jpg"
+                width="200" alt="Ottoman"><br>Ottoman
+          </a> 
+        </div>
+        <!-- the sofa -->
+        <div class="cell"> 
+          <a href="../images/sofas_and_chairs/sofa.jpg" target="inline-frame">
+            <img src="../images/sofas_and_chairs/sofa.jpg"
+                width="200" alt="Sofa"><br>Sofa
+          </a>
+        </div>
+        <!-- the chair -->
+        <div class="cell"> 
+          <a href="../images/sofas_and_chairs/chair-and-a-half.jpg" target="inline-frame">
+            <img src="../images/sofas_and_chairs/chair-and-a-half.jpg"
+                width="200" alt="Chair"><br> Chair
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- iframe showing the full-size images  -->
+    <div id="iframe-div">
+      <iframe name="inline-frame" height="800"
+      src="../images/sofas_and_chairs/yosemite-valley-wildlife-furniture-collection-3.jpg"></iframe>
+    </div>
+
+    <!-- imagemap with mouseover that displays details -->
+    <h3>Quality Craftmanship</h3>
+    <div class="table">
+      <div class="row">
+        <!-- left image -->
+        <div class="cell">
+          <img src="../images/sofas_and_chairs/chair-for-imagemap.jpg" alt="Chair Imagemap" width="500" usemap="#quality_details">
+          <map name="quality_details">
+              <!-- validator gives errors about missing href, but standard says to just omit instead of using nohref -->
+              <area shape="rect" coords="193,246,264,480" 
+                onmouseover="showMessage('Side Carvings', 'The sides have Intricate decorative carving on kiln-dried hardwoods.')"
+                alt="Side Carvings">
+              <area shape="rect" coords="124,128,411,212" 
+                onmouseover="showMessage('Upholstery', 'The upholstery has quality stitching. All fabric is Scotch-Guard treated.')"
+                alt="Upholstery">
+              <area shape="rect" coords="280,218,374,409" 
+                onmouseover="showMessage('Leather','Made from top grain leather for durability and a uniform look.')" 
+              alt="Leather" >
+          </map>
+        </div>
+        <!-- right message area -->
+        <div class="cell" style="vertical-align: top;">
+          <p style="background-color: white;" id="detials_box">Move your mouse over a section of the picture:</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- ===============  FOOTER  ============= -->
+  <footer class="container">
+    <hr>
+    Copyright 2020 michaelsteven.com
+    <div style="text-align:left">
+      <sup>1</sup>Quantities limited.  Promotion applies to selected in-stock items only.
+    </div>
+  </footer>
+</body>
+</html>

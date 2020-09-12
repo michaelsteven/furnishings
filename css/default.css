@@ -1,0 +1,76 @@
+﻿/* Rules for all web pages */
+
+/* Layout Rules */
+body {
+  background-color: #fffae6;
+  padding: 10px;
+}
+.center {
+  display: flex; justify-content: center;
+}
+.container {
+  margin-left: 60px;
+  margin-right: 60px;
+}
+
+/* Header rules */
+header {
+  border-radius: 15px 15px 0px 0px;
+  background-image: linear-gradient(rosybrown, white); 
+  margin-top: 30px;
+}
+header nav {
+  text-align: center;
+}
+header nav a:hover {
+  background-color: lightgreen;
+}
+header h1 {
+  background-color: rosybrown;
+  border-radius: 15px 15px 0px 0px;
+  color: #45220A;
+  padding: 10px; 
+  font-family: Arial, Helvetica, sans-serif;
+}
+header aside {
+    float: right;
+    width: 200px;
+    margin: 15px;
+    color: white;
+    border-style: none;
+    padding: 5px 15px;
+    background-color: rosybrown;
+}
+header .catchPhrase {
+  font-family: cursive;
+  line-height: 1.2em;
+  text-align: center;
+}
+
+/* Content Rules */
+article {
+  background-color: white;
+  padding: 10px 80px;
+}
+h2{
+  color: #45220A;
+}
+h3{
+  color: saddlebrown;
+}
+h2, h3 {
+  font-family: cursive;
+}
+article p {
+  padding: 10px 20px;
+  text-align: justify;
+}
+
+/* Footer Rules */
+footer {
+  background-color: white;
+  margin-top: -1em;
+  margin-bottom: 60px;
+  padding-bottom: 10px;
+  text-align: center;
+}
