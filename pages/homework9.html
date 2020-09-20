@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Michael Hepfer">
+  <meta name="description" content="Unit 5 Homework, CS-240, Fall 1 2020, Park University">
+  <meta name="keywords" content="Unit 5, javascript, forms, firewood">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michael Steven Home Furnishings - Homework 9 - Michael Hepfer</title>
+  <link rel="stylesheet" href="../css/default.css">
+  <style>
+    /* default paragraph style */
+    p {
+      background-color: papayawhip;
+      padding: 5px;
+      text-align: justify;
+      margin: 0px 10px;
+    }
+
+    /* calculator styling */
+    .calculator {
+      margin: 10px 3%;
+      padding: 20px;
+      text-align:  center;
+      align-items: center;
+      background-color: lavender; 
+    }
+
+    /* form layout table styling */ 
+    .table {
+      display: table;
+      padding-bottom: 20px;
+      margin: 20px;
+    }
+    .row {display: table-row;}
+    .cell:nth-child(1) {
+      text-align: right
+    }
+    .cell {
+      display: table-cell;
+      padding: 5px;
+      text-align: left;
+    }
+    input:invalid{ background-color: rgb(255, 220, 220); }
+    
+    /* Results data table styling */
+    table {border-collapse: collapse;}
+    th {
+      vertical-align: top;
+    }
+    th, td {
+      border: thin solid;
+      padding: 2px 5px;
+    }
+    td:nth-child(1), td:nth-child(3), td:nth-child(5) {
+      text-align: right;
+    }
+    td:nth-child(4)  {
+      text-align: center;
+    }
+  </style>
+
+  <script>
+    /***********************************************************************
+     *  processes the form that calculates the number of cords needed based
+     *  on the input form. Sets resulting values in the results tables.
+     * 
+     * Parameters
+     *   form - the form with input variables
+     * ********************************************************************/
+    function processForm(form){
+
+      // validate the form
+      if ( ! form.checkValidity() ) {
+        // the form is invalid
+        return; // exit the method
+      }
+
+      // get the typical btus used per winter
+      var typicalBtusInMillions = form.elements["typicalWinterBtus"].value;
+
+      // get the selected wood name and it's BTU value (without NPE checking)
+      var woodDropdown = form.elements["woodBTUs"];   // wood BTU's dropdown
+      var selectedWoodOption = woodDropdown.options[woodDropdown.selectedIndex];
+      var woodName = selectedWoodOption.innerHTML;        // selected wood name
+      var woodBtusInMillions = selectedWoodOption.value;  // selected btu value 
+
+      // get the stove efficiency (in percent) from the form
+      var stoveEfficiencyInPercent = form.elements["stoveEfficiency"].value; 
+     
+      // call a function to calculate the number of cords needed
+      var cordsNeeded = calcluateCordsNeeded(woodBtusInMillions, 
+                                               stoveEfficiencyInPercent, 
+                                               typicalBtusInMillions );
+
+      // get the table and create a new row
+      var resultsTable = document.getElementById("results");     // results table
+      var row = resultsTable.insertRow(resultsTable.rows.length ); // the new row
+
+      // set the row data for the new row in the results table
+      row.insertCell(0).innerHTML = typicalBtusInMillions;    // typical btus
+      row.insertCell(1).innerHTML = woodName;                 // wood name 
+      row.insertCell(2).innerHTML = woodBtusInMillions;       // wood btus
+      row.insertCell(3).innerHTML = stoveEfficiencyInPercent; // stove efficiency
+      row.insertCell(4).innerHTML = cordsNeeded;              // cords needed  
+    }
+  
+
+    /********************************************************
+     * Calculates the number of cords needed based on
+     * the wood btus, the efficiency of burning, and
+     * the number of btus that need to be produced.
+     * 
+     * Parameters
+     *   woodBtusInMillions - number
+     *      BTU's produced for a cord of the given wood type
+     *   efficiencyPercent  - number
+     *      efficiency percetage of the stove
+     *   btusNeededInMillions - number
+     *      the number of BTUs needed
+     * 
+     * Returns - number 
+     *   cords needed or null
+     * *****************************************************/ 
+    function calcluateCordsNeeded(woodBtusInMillions, efficiencyPercent, 
+                                                btusNeededInMillions ) {
+      var numberOfCords = null; // the number of cords to be returned
+
+      // convert to millions
+      var btusNeeded = btusNeededInMillions * 1000000;
+
+      // calculate the btus generated from a cord using the stove
+      var stoveBtusPerCord = calculateStoveBtusPerCord( woodBtusInMillions,
+                                                        efficiencyPercent);
+      
+      if (stoveBtusPerCord > 0) {  // prevent division by zero
+        // calculate the number of cords needed based on stove's btus per cord
+        // and round to 1 decimal place
+        numberOfCords = (btusNeeded / stoveBtusPerCord).toFixed(1);
+      }
+
+      // return the number of cords
+      return numberOfCords;
+    }
+
+
+    /******************************************************
+     * Calculates the Stove's BTU's per Cord
+     * 
+     * Parameters
+     *   woodBtusInMillions - number 
+     *     BTU's produced for a cord of the given wood type
+     *   efficiencyPercent - number 
+     *     the efficiency percetage of the stove
+     * 
+     * Returns - number
+     *    The  stove's BTU's per cord
+     * ***************************************************/
+    function calculateStoveBtusPerCord(woodBtusInMillions, efficiencyPercent) {
+      var woodBtusPerCord = woodBtusInMillions * 1000000; // multipy by a million
+      var effiencyDecimal = efficiencyPercent / 100;      // convert to decimal
+
+      // wood btus per cord multipled by decimal percentage of stove efficiency 
+      return woodBtusPerCord * effiencyDecimal;           // tove btus per cord         
+    }
+  </script>
+</head>
+
+<!-- 
+  Tags used: 
+    html, head, meta, title, header, body, footer, h1, h2, h3, h4, hr, 
+    nav, div, aside, blockquote
+-->
+<body>
+  <!-- require javascript-->
+  <noscript>
+    <p>
+      This web page uses JavaScript. For proper results,
+      you must use a web browser with JavaScript enabled.
+    </p>
+  </noscript>
+
+  <!-- ===========  Header =============== -->
+  <header class="container">
+    <aside>Phone: (512) 555-1212</aside> 
+    <h1>Michael Steven Home Furnishings</h1>
+    <!-- Tag Line -->
+    <blockquote class="catchPhrase" 
+                cite="http://furnishings.michaelsteven.com">
+      Quality Crafted and Made to Last
+    </blockquote>
+    <hr>
+    <!-- Navigation -->
+    <nav>
+      <a href="homework2.html">Home</a> | 
+      <a href="homework7.html">Sofas & Chairs</a> | 
+      <a href="homework4.html">Stoves and Ranges</a> | 
+      <a href="homework5.html">Lighting</a> |
+      <a href="homework3.html">Locations</a> | 
+      <a href="homework6.html">Demos and Events</a> |
+      <a href="homework9.html">Calculators</a>
+    </nav>
+  </header>
+  
+  <!-- ===============  CONTENT  ============= --> 
+  <div class="container" style="background-color:white;padding: 10px 20px; ">
+
+    <!-- page title -->
+    <h2 class="center">Calculators</h2>
+
+    <!-- ============  BODY ================= -->
+    <h3>How many cords of firewood do I need?</h3>
+    <!-- Firwood Calculator -->
+    <div class="calculator" >
+      <!-- firewood calculator form -->
+      <div class="center">
+        <div class="table">  
+          <form>
+
+            <!-- Typical BTU's used -->
+            <div class="row">
+              <div class="cell">
+                <label for="typicalWinterBtus">Typical BTU's Needed:</label>
+              </div>
+              <div class="cell">
+                <input id="typicalWinterBtus" value="91.5" 
+                       min="1" max="300" step="0.5" type="number" required>
+                million
+              </div>
+            </div>
+
+            <!-- Type of Wood-->
+            <div class="row">
+              <div class="cell">
+                <label for="woodBTUs">Type of Wood:</label>
+              </div>
+              <div class="cell">   
+                <select id="woodBTUs">
+                  <option value="25.7">Oak, White</option>
+                  <option value=27.7>Hickory, Shagbark</option>
+                  <option value="24">Oak, Red</option>
+                  <option value="23.6">Ash, White</option> 
+                  <option value="19.5">Elm, American</option>
+                  <option value="15.2">Pine, Ponderosa</option>
+                  <option value="12.2">Cedar, White</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Stove Efficiency --> 
+            <div class="row">
+              <div class="cell">
+                <label for="stoveEfficiency">Stove Efficiency:</label>
+              </div>
+              <div class="cell">   
+                <input id="stoveEfficiency" type="number" 
+                       value="60" min="1" max="100" step="0.5" required> %
+              </div>
+            </div>
+
+            <!-- Calculate button -->
+            <div class="row">
+              <div class="cell">  
+              </div>
+              <div class="cell">
+                <input type="button" value="Calculate" 
+                      onclick="processForm(this.form)">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+   
+      <!-- results table -->
+      <h4 class="center">Calculation Results:</h4>
+      <div>
+        <table class="center" id="results">
+          <tr>
+            <th>Past BTU's<br>(in millions) &nbsp;</th>
+            <th>Wood Type &nbsp;</th>
+            <th>BTUs per Cord<br>(in millions) &nbsp;</th>
+            <th>Stove Effiency<br>(in percent) &nbsp;</th>
+            <th>Cords Needed &nbsp;</th>
+          </tr>
+        </table>
+      </div>
+    </div> 
+    <!-- End of Firwood Calculator -->
+
+    <!-- notes -->
+    <h4>Assumptions and Instructions:</h4>
+    <ul>
+      <li>
+        Propane provides 91,000 BTUs per gallon.  A 500 gallon propane tank 
+        refilled twice for 1000 gallons would produce 91.5 million BTUs.
+      </li>
+      <li>
+        The average wood stove is around 70% efficient. 
+      <li>
+        For a stove to be EPA certified it must have an efficienty of 60% 
+        or higher. 
+      </li>
+      <li>
+        The Princess model stoves are in the mid to low 80%'. 
+      </li>
+      <li>
+        The efficiency of an open fireplace is very poor and might reach 15%. 
+        Ading a fireplace insert can make a big difference.
+      </li>
+      <li>  
+        There are some variables that cannot be accounted for, such as longer 
+        or colder than nomral winters. Be sure to error on the side of caution
+        and have more fuel than you think you will need.
+      </li>
+    </ul>
+
+  </div>
+
+  <!-- ===============  FOOTER  ============= -->
+  <footer class="container">
+    <hr>
+    Copyright 2020 michaelsteven.com
+  </footer>
+</body>
+</html>
