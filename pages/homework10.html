@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Michael Hepfer">
+  <meta name="description" content="Unit 6 Homework, CS-240, Fall 1 2020, Park University">
+  <meta name="keywords" content="Unit 6, javascript, forms, Gift Cards">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michael Steven Home Furnishings - Homework 6 - Michael Hepfer</title>
+  <link rel="stylesheet" href="../css/default.css">
+  <style>
+    /* default paragraph style */
+    p {
+      background-color: papayawhip;
+      padding: 5px;
+      text-align: justify;
+      margin: 0px 10px;
+    }
+
+    /* design card layout*/
+    .row { 
+      margin-right:  15px;
+      margin-left:  15px;
+      background-color: #ffffff;
+      padding-left: 20px;
+      padding-right: 20px;
+    } 
+
+    /* Left side style */
+    #left { 
+      width: 35%;
+      display:inline-block;
+      padding: 10px; 
+      color: #000000;
+      max-width: 400px;
+    } 
+    label{
+      display: inline-block;
+      width: 130px;
+      padding: 5px 0px;
+    }
+    .thumbnails {
+      width: 100px;
+      height: 100px;
+    }
+    .rbgImage {
+      display: inline;
+      width: 30px;
+    }  
+    input:invalid{ background-color: rgb(255, 220, 220); }
+
+    /* Right Side style */
+    #right { 
+      display:inline-block;  
+      width: 55%;
+      float: right;
+      min-height: 475px;
+      padding: 10px; 
+    } 
+  </style>
+  <script src="../js/navigation.js"></script>
+</head>
+
+<!-- 
+  Tags used: 
+    html, head, meta, title, body, h1, h2, h3, br, p, 
+    style, script, form, label input, button, select
+-->
+<body onload="createHeaderFooter();">
+  <!-- require javascript-->
+  <noscript>
+    <p>
+      This web page uses JavaScript. For proper results,
+      you must use a web browser with JavaScript enabled.
+    </p>
+  </noscript>
+  
+  <!-- ===============  CONTENT  ============= --> 
+  <div class="container" 
+       style="background-color:white;padding: 10px 20px; ">
+    <h2 class="center">Order A Customized Gift Card</h2>    
+    
+    <div class="row">
+      <!-- Instructions -->
+      <p style="padding:10px;">
+        Create a gift card with a customized background and message, 
+        then have it sent to the address of your choosing.
+      </p>
+
+      <!-- Step 1 Card Design  -->
+      <h3>Step 1. Design the Card</h3> 
+      <div id="left">
+        <aside id="myaside">
+          <form>
+            <!-- Card Title -->
+            <label for="titleEvent">Card Title:</label>
+            <input id="titleEvent" type="text" size="16"/><br />
+
+            <!-- Date -->
+            <label for="dateEvent">Date:</label>
+            <input type="date" id="dateEvent" /><br />
+
+            <!-- Background Color -->
+            <label for="backgroundColor">Background:</label>
+            <input type="color" value="#ffffff" id="backgroundColor" /><br />
+
+            <!-- Font Color -->
+            <label for="fontColor">Font color:</label>
+            <input type="color" value="#000000" id="fontColor" /><br />
+
+            <!--Font -->
+            <label for="fontFamily">Font:</label>
+            <select id="fontFamily"></select><br />
+
+            <!-- Border Style -->
+            <label for="borderStyle">Border style:</label>
+            <select id="borderStyle"></select><br />
+
+            <!--Message -->
+            <label for="customMessage">Message:</label><br />
+            <textarea id="customMessage"></textarea><br />
+
+            <!-- cols="50" rows="5" -->
+            <label>Choose an Image:</label><br />
+            <div id="cardImages"></div><br />
+            <!-- radio buttons will go here -->
+
+            <!-- image transparency-->
+            <label for="imageOpacity">Image Opacity:</label>
+            <input id="imageOpacity" type="number" value="50" 
+                   step="5" min="0" max="100" />%<br />
+            
+            <!-- submit button -->
+            <input type="button" id="btnSubmit" 
+                   value="Show My Design!" onClick="applyStyles();" />
+          </form>
+          <br /><br /> 
+        </aside>
+      </div>
+      <div id="right">
+        <div id="placeholder"></div>
+      </div>
+    </div>
+    <br />
+
+    <!-- Custom JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../js/homework10.js"></script> 
+  </div>
+</body>
+</html>

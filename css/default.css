@@ -20,6 +20,17 @@ header {
   margin-top: 30px;
 }
 header nav {
+  align-self: center;
+  text-align: center;
+}
+header nav ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  overflow: hidden;
+}
+header nav ul li {
+  float: left;
   text-align: center;
 }
 header nav a:hover {
