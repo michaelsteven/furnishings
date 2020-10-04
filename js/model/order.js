@@ -1,17 +1,17 @@
 /****************************************************************
-* contact.js
+* order.js
 * Mike Hepfer
 *
-* Model object for holding contact data
+* Model object for holding order data
 ****************************************************************/
 
-class Contact {
+class Order {
   nameFirst;
   nameMiddle;
   nameLast;
   mailingAddress = null;
   areasOfInterest;
-  referral;
+  fruitCake;
 
 
   rowIndex=0;
@@ -62,12 +62,12 @@ class Contact {
     this.areasOfInterest = areasOfInterest;
   }
 
-  getReferral(){
-    return this.referral;
+  getFruitCake(){
+    return this.fruitCake;
   }
 
-  setReferral(referral){
-    this.referral = referral;
+  setFruitCake(fruitCake){
+    this.fruitCake = fruitCake;
   }
 
   getRowIndex(){

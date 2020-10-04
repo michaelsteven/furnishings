@@ -19,7 +19,8 @@ function createHeaderFooter() {
     "Locations": "homework3.html",
     "Demos & Events":"homework6.html",
     "Calculators":"homework9.html",
-    "Gift Cards":"homework10.html"
+    "Gift Cards":"homework10.html",
+    "Fruit Cakes":"homework11.html"
   };
 
   // build the aside

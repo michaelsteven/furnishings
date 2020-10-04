@@ -1,16 +1,16 @@
 /****************************************************************
-* contactManager.js
+* orderManager.js
 * Mike Hepfer
 *
 * An object with helper classes used by the catalog request page 
-* to preform operations related to CRUD of items in the contacts
+* to preform operations related to CRUD of items in the orders
 * array.
 ****************************************************************/
 
-class ContactManager {
+class FruitCakeOrderManager {
 
-  // object representing the selected contact
-  contact = "";  
+  // object representing the selected order
+  order = "";  
 
   /*****************************************
    * Update arrays and displayed table
@@ -26,30 +26,32 @@ class ContactManager {
     }
 
     // loop through the array
-    for (let i=0; i<contacts.length; i++) {
+    for (let i=0; i<orders.length; i++) {
       // add a new row to the table
-      var row = table.insertRow(rows.length);
-      row.setAttribute("onclick","contactManager.selectContact(this)");
-      row.insertCell(0).innerHTML = contacts[i][0];
-      row.insertCell(1).innerHTML = contacts[i][2];
-      row.insertCell(2).innerHTML = contacts[i][3][2];
-      row.insertCell(3).innerHTML = contacts[i][3][3];
-      row.insertCell(4).innerHTML = contacts[i][3][4];
+      var tableRow = table.insertRow(rows.length);
+      tableRow.setAttribute("onclick","fruitCakeOrderManager.selectOrder(this)");
+      tableRow.insertCell(0).innerHTML = orders[i][0];
+      tableRow.insertCell(1).innerHTML = orders[i][2];
+      tableRow.insertCell(2).innerHTML = orders[i][3][2];
+      tableRow.insertCell(3).innerHTML = orders[i][3][3];
+      tableRow.insertCell(4).innerHTML = orders[i][3][4];
+      tableRow.insertCell(5).innerHTML = orders[i][5];
     }
   } // end fillTable
 
 
   /***********************************************
-   * Select Contact
+   * Select Order
    * 
    * Called when the table row is clicked
    * @param {*} row 
    **********************************************/
-  selectContact(row){
-    var contact = this.buildContactForRow(row);
-    this.populateForm( contact  );
-    this.contact = contact;
-  } // end selectContact
+  selectOrder(row){
+    
+    var order = this.buildOrderForRow(row);
+    this.populateForm(order);
+    this.order = order;
+  } // end selectOrder
 
 
   /***********************************************
@@ -63,24 +65,24 @@ class ContactManager {
     }
 
     // add a new row to the array
-    contacts.push(new Array(6));
-    contacts[contacts.length-1][3] = new Array(5);
-    contacts[contacts.length-1][4] = new Array(0);
+    orders.push(new Array(6));
+    orders[orders.length-1][3] = new Array(5);
+    orders[orders.length-1][4] = new Array(0);
    
-    // new up a contact object
-    var contact = new Contact(null);
-    contact.setRowIndex(contacts.length - 1);
+    // new up a order object
+    var order = new Order(null);
+    order.setRowIndex(orders.length - 1);
     
-    // put the values from the form into the new Contact object
-    this.updateContactFromForm( contact);
+    // put the values from the form into the new order object
+    this.updateOrderFromForm( order);
 
-    // update the row in the contacts array
-    this.UpdateContactsArrayRow(contact);
+    // update the row in the orders array
+    this.updateOrdersArrayRow(order);
 
     // resort and repopulate the table
     this.fillTable();
 
-    // clear the form and selected contact
+    // clear the form and selected order
     this.cancel();
   } // end add
 
@@ -100,16 +102,16 @@ class ContactManager {
       return;
     }
 
-    // put the values from the form into the selected Contact object
-    this.updateContactFromForm( this.contact); 
+    // put the values from the form into the selected order object
+    this.updateOrderFromForm( this.order); 
 
-    // update the row in the contacts array
-    this.UpdateContactsArrayRow(this.contact);
+    // update the row in the orders array
+    this.updateOrdersArrayRow(this.order);
 
     // resort and repopulate the table
     this.fillTable();
 
-    // clear the form and the selected contact
+    // clear the form and the selected order
     this.cancel();
   } // end replace
 
@@ -125,10 +127,10 @@ class ContactManager {
     }
 
     // remove the row from the table
-    table.deleteRow( this.contact.getRowIndex() + 1 );
-    contacts.splice( this.contact.getRowIndex(), 1);
+    table.deleteRow( this.order.getRowIndex() + 1 );
+    orders.splice( this.order.getRowIndex(), 1);
     
-    // clear the form and selected contact
+    // clear the form and selected order
     this.cancel();
   } // end deleteProperty
 
@@ -157,8 +159,8 @@ class ContactManager {
       }
     }
 
-    // clear out the selected contact
-    this.contact = "";
+    // clear out the selected order
+    this.order = "";
   } // end cancel
 
 
@@ -171,7 +173,7 @@ class ContactManager {
    * sorts the array by first name
    ***************************************/
   nameSort() {
-    contacts.sort( 
+    orders.sort( 
       function(a,b) {
         return (a[0] < b[0]) ? -1 : (a[0] > b[0]) ? 1 : 0;  
       }
@@ -180,15 +182,15 @@ class ContactManager {
 
 
   /*******************************************
-   * Updates the contact with the form values
+   * Updates the order with the form values
    * 
-   * @param {*} contact 
+   * @param {*} order 
    ******************************************/
-  updateContactFromForm(contact){
+  updateOrderFromForm(order){
     // update the name
-    contact.setNameFirst ( form.elements.namedItem("nameFirst").value );
-    contact.setNameMiddle( form.elements.namedItem("nameMiddle").value );
-    contact.setNameLast( form.elements.namedItem("nameLast").value );
+    order.setNameFirst ( form.elements.namedItem("nameFirst").value );
+    order.setNameMiddle( form.elements.namedItem("nameMiddle").value );
+    order.setNameLast( form.elements.namedItem("nameLast").value );
 
     // update the areas of interest
     var areasOfInterestSelect = form.elements.namedItem("areasOfInterest");
@@ -198,19 +200,19 @@ class ContactManager {
           selectedItems.push(areasOfInterestSelect.options[i].value);
         }
     }
-    contact.setAreasOfInterest(selectedItems);
+    order.setAreasOfInterest(selectedItems);
 
-    // get the referral radio button value
-    var elements = form.elements.namedItem("referral"); 
+    // get the fruitCake radio button value
+    var elements = form.elements.namedItem("fruitCake"); 
     for(let i = 0; i < elements.length; i++) { 
       if(elements[i].checked){
-        contact.setReferral( elements[i].value );
+        order.setFruitCake( elements[i].value );
         break;
       } 
-    } // end updateContactFromForm
+    } // end updateorderFromForm
 
     // set the address
-    var address = contact.getMailingAddress();
+    var address = order.getMailingAddress();
     if(null == address){
       address = new Address();
     }
@@ -219,26 +221,26 @@ class ContactManager {
     address.setCity( form.elements.namedItem("city").value );
     address.setState( form.elements.namedItem("state").value );
     address.setZip( form.elements.namedItem("zip").value );
-    contact.setMailingAddress( address );
-  } // end updateContactFromForm
+    order.setMailingAddress( address );
+  } // end updateOrderFromForm
 
 
   /**************************************************
    * Populate Form
    * 
    * Populates the form data in the form from data in 
-   * a Contact object
+   * a order object
    * 
-   * @param Contact contact 
+   * @param order order 
    **************************************************/
-  populateForm(contact){
+  populateForm(order){
     // populate the name fields
-    form.elements.namedItem("nameFirst").value = contact.getNameFirst(); 
-    form.elements.namedItem("nameMiddle").value = contact.getNameMiddle();
-    form.elements.namedItem("nameLast").value =  contact.getNameLast();
+    form.elements.namedItem("nameFirst").value = order.getNameFirst(); 
+    form.elements.namedItem("nameMiddle").value = order.getNameMiddle();
+    form.elements.namedItem("nameLast").value =  order.getNameLast();
     
     // populate the address fields
-    var mailingAddress = contact.getMailingAddress();
+    var mailingAddress = order.getMailingAddress();
     form.elements.namedItem("street1").value = mailingAddress.getStreet1();
     form.elements.namedItem("street2").value = mailingAddress.getStreet2();
     form.elements.namedItem("city").value = mailingAddress.getCity();
@@ -246,10 +248,10 @@ class ContactManager {
     form.elements.namedItem("zip").value = mailingAddress.getZip();
 
     // set the values of the listbox
-    if(null != contact.getAreasOfInterest() ){
+    if(null != order.getAreasOfInterest() ){
       var selectBox = form.elements.namedItem("areasOfInterest");
       for(let option of selectBox.options){
-        if( contact.getAreasOfInterest().includes(option.value) ) {
+        if( order.getAreasOfInterest().includes(option.value) ) {
           option.selected = true;
         } else {
           option.selected = false;
@@ -257,65 +259,65 @@ class ContactManager {
       }
     }
 
-    // check the referral radio button
-    form.elements.namedItem( contact.getReferral() ).checked = true;
+    // check the fruitCake radio button
+    form.elements.namedItem( order.getFruitCake() ).checked = true;
   } // end populateForm
 
 
   /****************************************************
-   * Build Contact for Row
+   * Build order for Row
    * 
-   * Builds a Contact object from a row in the Contacts
+   * Builds a order object from a row in the orders
    * array
    *
    *  @param {*} row 
    **************************************************/
-  buildContactForRow(row){
-    // new up an instance of Contact
-    var contact = new Contact(row);
-    var rowIndex = contact.getRowIndex();
+  buildOrderForRow(row){
+    // new up an instance of order
+    var order = new Order(row);
+    var rowIndex = order.getRowIndex();
 
-    // set properties from the row in the Contacts array
-    contact.setNameFirst ( contacts[rowIndex][0] );
-    contact.setNameMiddle( contacts[rowIndex][1] );
-    contact.setNameLast(  contacts[rowIndex][2] );
-    contact.setAreasOfInterest( contacts[rowIndex][4] );
-    contact.setReferral( contacts[rowIndex][5] );
+    // set properties from the row in the orders array
+    order.setNameFirst ( orders[rowIndex][0] );
+    order.setNameMiddle( orders[rowIndex][1] );
+    order.setNameLast(  orders[rowIndex][2] );
+    order.setAreasOfInterest( orders[rowIndex][4] );
+    order.setFruitCake( orders[rowIndex][5] );
 
     var address = new Address();
-    address.setStreet1( contacts[rowIndex][3][0] );
-    address.setStreet2( contacts[rowIndex][3][1] );
-    address.setCity( contacts[rowIndex][3][2] );
-    address.setState( contacts[rowIndex][3][3] );
-    address.setZip( contacts[rowIndex][3][4] );
-    contact.setMailingAddress( address );
+    address.setStreet1( orders[rowIndex][3][0] );
+    address.setStreet2( orders[rowIndex][3][1] );
+    address.setCity( orders[rowIndex][3][2] );
+    address.setState( orders[rowIndex][3][3] );
+    address.setZip( orders[rowIndex][3][4] );
+    order.setMailingAddress( address );
 
-    // return with the new contact
-    return contact;
-  } // end buildContactForRow
+    // return with the new order
+    return order;
+  } // end buildOrderForRow
 
 
   /**************************************************
-   * Update Contacts Array Row
+   * Update orders Array Row
    * 
    * Updates a row in the Contracts Array using the
-   * values in a Contact object
+   * values in a order object
    * 
-   * @param {*} contact 
+   * @param {*} order 
    *************************************************/
-  UpdateContactsArrayRow(contact){
-    var rowIndex = contact.getRowIndex();
-    var address = contact.getMailingAddress();
-    contacts[rowIndex][0] = contact.getNameFirst();
-    contacts[rowIndex][1] = contact.getNameMiddle();
-    contacts[rowIndex][2] = contact.getNameLast();
-    contacts[rowIndex][4] = contact.getAreasOfInterest();
-    contacts[rowIndex][5] = contact.getReferral();
-    contacts[rowIndex][3][0] = address.getStreet1();
-    contacts[rowIndex][3][1] = address.getStreet2();
-    contacts[rowIndex][3][2] = address.getCity();
-    contacts[rowIndex][3][3] = address.getState();
-    contacts[rowIndex][3][4] = address.getZip();
-  } // UpdateContactsArrayRow
+  updateOrdersArrayRow(order){
+    var rowIndex = order.getRowIndex();
+    var address = order.getMailingAddress();
+    orders[rowIndex][0] = order.getNameFirst();
+    orders[rowIndex][1] = order.getNameMiddle();
+    orders[rowIndex][2] = order.getNameLast();
+    orders[rowIndex][4] = order.getAreasOfInterest();
+    orders[rowIndex][5] = order.getFruitCake();
+    orders[rowIndex][3][0] = address.getStreet1();
+    orders[rowIndex][3][1] = address.getStreet2();
+    orders[rowIndex][3][2] = address.getCity();
+    orders[rowIndex][3][3] = address.getState();
+    orders[rowIndex][3][4] = address.getZip();
+  } // updateOrdersArrayRow
 
 }

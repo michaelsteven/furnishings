@@ -19,7 +19,7 @@
       margin: 0px 10px;
     }
 
-    /* design card layout*/
+    /* content row layout*/
     .row { 
       max-width: 850px;
       margin-right:  15px;
@@ -48,6 +48,7 @@
       max-width: 400px;
     } 
 
+    /* Right side */
     #right { 
       width: 48%;
       float: right;
@@ -55,6 +56,7 @@
       padding: 5px; 
     } 
 
+    /* label styling */
     label{
       text-align: right;
       display: inline-block;
@@ -85,6 +87,9 @@
       height: 10px;
     }
 
+    /* form input and select styling */
+    form {margin: 20px 0;}
+   
     input {
       border: 1px solid;
       border-radius: 4px;
@@ -104,23 +109,29 @@
       padding: 0.25rem;
       transition: background-color 0.5s ease-out;
     }
+    
+    select:invalid { background-color: rgb(255, 220, 220); }
+    input:invalid{ background-color: rgb(255, 220, 220); }
+
+    /* radio button styling */
     input[type="radio"] {
       width: 5px;
       padding: 0px;
     }
    
-    .rbReferral {
+    .rbFruitCake {
       display: inline-block;
       width: 5px;
       padding: 0;
       margin: 0;
     }
 
+    /* color the required asterisk */
+    .required {
+      color: red;
+    }
 
-    input:invalid{ background-color: rgb(255, 220, 220); }
-
-    form {margin: 20px 0;}
- 
+    /* table styling */
     table {
       border: "1";
       border-style:dotted;
@@ -128,41 +139,46 @@
       margin-top: 10px;
     }
     tr:nth-child(even) {background-color: #f2f2f2;}
-
+    tr {
+      cursor: pointer;
+    }
   </style>
 
-    <script>
+  <script>
     var form;
     var table;
-    var contactManager;
-    var contact = "";  // object representing one contact
-    // This 2D array facilitates sorting and provides data for table
+    var fruitCakeOrderManager;
 
-    var contacts = [
-      ["John","Jacob","Schmidt",["123 Pine St.","","Priceville","AL","35603"],["appliances","lighting"],"other"],
-      ["Jane","","Austen",["123 Hudson","","New York","NY","12100"],["furniture","kitchen"],"wordofmouth"]
+    // This 2D array facilitates sorting and provides data for table
+    
+    var orders = [
+      ["John","Jacob","Schmidt",["123 Pine St.","","Priceville","AL","35603"],["appliances","lighting"],"german"],
+      ["Jane","","Austen",["123 Hudson","","New York","NY","12100"],["furniture","kitchen"],"british"]
     ];
 
+
+    // initializes the Fruit-Cake Order Manager
     function initialize() {
       form = document.getElementsByTagName("form")[0];
-      table = document.getElementById("descriptions");
-      contactManager = new ContactManager();
-      contactManager.fillTable();
+      table = document.getElementById("orderTable");
+      fruitCakeOrderManager = new FruitCakeOrderManager();
+      fruitCakeOrderManager.fillTable();
     } // end initialize
       
   </script>
-  <script src="../js/model/contact.js"></script>
+  <script src="../js/model/order.js"></script>
   <script src="../js/model/address.js"></script>
-  <script src="../js/contactManager.js"></script>
+  <script src="../js/fruitCakeOrderManager.js"></script>
   <script src="../js/navigation.js"></script>
 </head>
 
 <!-- 
   Tags used: 
-    html, head, meta, title, body, h1, h2, h3, br, p, 
-    style, script, form, label input, button, select
+    html, head, meta, title, body, h1, h2, h3, br, p, table 
+    style, script, span, form, label input, button, select
 -->
 <body onload="createHeaderFooter(); initialize();">
+
   <!-- require javascript-->
   <noscript>
     <p>
@@ -181,11 +197,16 @@
     <!-- Instructions -->
     <h3 style="text-align:center">Instructions:</h3>
     <p>
+      This Christmas season, send the gift of a traditional fruit cake.  We will also
+      send a copy of our catalog.  Use the order form below to place and track multiple
+      fruit cake orders!
+    </p>
+    <p>
       To add a new recipient, enter values in input boxes and click the
       "Add" button.
     </p>
     <p>
-      To select an existing recipient, and display its data in input boxes,
+      To select an existing fruit-cake recipient, and display its data in input boxes,
       in the table below, click anywhere on the row which identifies the
       recipient. To alter a particular recipient's data, select it, change
       displayed value(s) in input boxes, and click the "Replace" button.
@@ -206,7 +227,7 @@
             <legend>Name:</legend>
             <!-- first name -->
             <label class="label-short" for="nameFirst">First:</label>
-            <input id="nameFirst" type="text" size="20" tabindex="1" required>
+            <input id="nameFirst" type="text" size="20" tabindex="1" required autofocus>
             <span class="required">*</span><br>
             
             <!-- middle name -->
@@ -305,7 +326,7 @@
 
             <!-- Zip -->
             <label class="label-short" for="zip">Zip:</label>
-            <input id="zip" type="text" size="9" tabindex="8" required>
+            <input id="zip" type="text" size="9" tabindex="8"  pattern="^\s*?\d{5}(?:[-\s]\d{4})?\s*?$" required>
             <span class="required">*</span><br>
 
           </fieldset>
@@ -317,7 +338,7 @@
             <legend>Details</legend>
 
             <!-- Areas of Interest -->
-            <label class="label-left" for="areasOfInterest">Areas of Interest:</label> <span class="required">*</span><br>
+            <label class="label-left" for="areasOfInterest">Areas of Interest:</label><br>
             <select style="margin-left:65px;" id="areasOfInterest" size="5" tabindex="9" multiple>
               <option value="appliances">Appliances</option>
               <option value="furniture">Furniture</option>
@@ -326,39 +347,44 @@
               <option value="outback">Outback</option>
             </select><br>
 
-            <!-- Referral-->
+            <!-- Fruit Cake Type -->
             <label class="label-left">
-              How did you hear about us?:
+              Type of Fruit Cake?:
               <span class="required">*</span>
             </label><br>
-            <label class="label-radiobutton" for="wordofmouth">
-            <input class="rbReferral" style="width:5px;padding:0;" type="radio" id="wordofmouth" name="referral" tabindex="10" value="wordofmouth">
-              Word of Mouth
+            <!-- American -->
+            <label class="label-radiobutton" for="american">
+            <input class="rbFruitCake" style="width:5px;padding:0;" type="radio" id="american" name="fruitCake" tabindex="10" value="american" required>
+              American
             </label>
-            <label class="label-radiobutton" for="newspaper">
-              <input class="rbReferral" style="width:5px;padding:0;" type="radio" id="newspaper" name="referral" tabindex="11" value="newspaper">
-              Newspaper
+            <!-- British -->
+            <label class="label-radiobutton" for="british">
+              <input class="rbFruitCake" type="radio" id="british" name="fruitCake" tabindex="12" value="british">
+              British Dundee
             </label>
-            <label class="label-radiobutton" for="radio">
-              <input class="rbReferral" type="radio" id="radio" name="referral" tabindex="12" value="radio">
-              Radio
+            <!-- German -->
+            <label class="label-radiobutton" for="german">
+            <input class="rbFruitCake" style="width:5px;padding:0;" type="radio" id="german" name="fruitCake" tabindex="10" value="german">
+             German Stollen
             </label>
-            <label class="label-radiobutton" for="television">
-              <input class="rbReferral" type="radio" id="television" name="referral" tabindex="13" value="television">
-              Television
+            <!-- Itialian -->
+            <label class="label-radiobutton" for="itialian">
+              <input class="rbFruitCake" style="width:5px;padding:0;" type="radio" id="itialian" name="fruitCake" tabindex="11" value="itialian">
+              Itialian (Tuscan) Panforte
             </label>
-            <label class="label-radiobutton" for="other">
-              <input class="rbReferral" type="radio" id="other" name="referral" tabindex="14" value="other">
-              Other
+            <!-- Swiss -->
+            <label class="label-radiobutton" for="swiss">
+              <input class="rbFruitCake" type="radio" id="swiss" name="fruitCake" tabindex="13" value="swiss">
+              Swiss Bimenbrot
             </label>
           </fieldset>
 
           <!-- the bottom buttons-->
           <div>
-            <input type="button" value="Cancel" onclick="contactManager.cancel()"><br>
-            <input type="button" value="Add" onclick="contactManager.add()">
-            <input type="button" value="Replace" onclick="contactManager.replace()">
-            <input type="button" value="Delete" onclick="contactManager.delete()">
+            <input type="button" value="Cancel" tabindex="14" onclick="fruitCakeOrderManager.cancel()"><br>
+            <input type="button" value="Add" tabindex="15" onclick="fruitCakeOrderManager.add()">
+            <input type="button" value="Replace" tabindex="16" onclick="fruitCakeOrderManager.replace()">
+            <input type="button" value="Delete" tabindex="17" onclick="fruitCakeOrderManager.delete()">
           </div>
 
         </div> <!-- end of right -->
@@ -366,15 +392,16 @@
       </form>
     </div> <!-- end of row-->
 
-    <!-- The recipient table -->
+    <!-- The Order Table table -->
     <div class="bottom-row"> 
-        <table id="descriptions">
+        <table id="orderTable">
           <tr>
             <th>First</th>
             <th>Last</th>
             <th>City</th>
             <th>State</th>
             <th>Zip</th>
+            <th>Fruit Cake</th>
           </tr>
         </table>
     </div>
