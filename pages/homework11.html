@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Michael Hepfer">
+  <meta name="description" content="Unit 7 Homework, CS-240, Fall 1 2020, Park University">
+  <meta name="keywords" content="Unit 7, javascript, forms, Mailing List">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michael Steven Home Furnishings - Homework 6 - Michael Hepfer</title>
+  <link rel="stylesheet" href="../css/default.css">
+
+  <style>
+    /* default paragraph style */
+    p {
+      background-color: papayawhip;
+      padding: 5px;
+      text-align: justify;
+      margin: 0px 10px;
+    }
+
+    /* design card layout*/
+    .row { 
+      max-width: 850px;
+      margin-right:  15px;
+      margin-left:  15px;
+      background-color: #ffffff;
+      padding-left: 20px;
+      padding-right: 20px;
+    } 
+
+    .bottom-row { 
+      justify-content: center;
+      max-width: 850px;
+      margin-right:  15px;
+      margin-left:  15px;
+      background-color: #ffffff;
+      padding-left: 20px;
+      padding-right: 20px;
+    } 
+
+    /* Left side style */
+    #left { 
+      width: 48%;
+      display: inline-block;
+      padding: 5px; 
+      color: #000000;
+      max-width: 400px;
+    } 
+
+    #right { 
+      width: 48%;
+      float: right;
+      min-height: 475px;
+      padding: 5px; 
+    } 
+
+    label{
+      text-align: right;
+      display: inline-block;
+      padding: 5px 0px;
+    }
+
+    .label-short {
+      width: 55px;
+    }
+
+    .label-medium {
+      width: 70px;
+    }
+
+    .label-long {
+      width: 180px;
+    }
+
+    .label-left {
+      text-align: left;
+      display: inline-block;
+      padding: 5px 0px;
+    }
+
+    .label-radiobutton {
+      display:block;
+      text-align:left;
+      height: 10px;
+    }
+
+    input {
+      border: 1px solid;
+      border-radius: 4px;
+      font-size: 1rem;
+      margin: 0.25rem;
+      min-width: 125px;
+      padding: 0.25rem;
+      transition: background-color 0.5s ease-out;
+    }
+
+    select {
+      border: 1px solid;
+      border-radius: 4px;
+      font-size: 1rem;
+      margin: 0.25rem;
+      min-width: 125px;
+      padding: 0.25rem;
+      transition: background-color 0.5s ease-out;
+    }
+    input[type="radio"] {
+      width: 5px;
+      padding: 0px;
+    }
+   
+    .rbReferral {
+      display: inline-block;
+      width: 5px;
+      padding: 0;
+      margin: 0;
+    }
+
+
+    input:invalid{ background-color: rgb(255, 220, 220); }
+
+    form {margin: 20px 0;}
+ 
+    table {
+      border: "1";
+      border-style:dotted;
+      width: 600px;
+      margin-top: 10px;
+    }
+    tr:nth-child(even) {background-color: #f2f2f2;}
+
+  </style>
+
+    <script>
+    var form;
+    var table;
+    var contactManager;
+    var contact = "";  // object representing one contact
+    // This 2D array facilitates sorting and provides data for table
+
+    var contacts = [
+      ["John","Jacob","Schmidt",["123 Pine St.","","Priceville","AL","35603"],["appliances","lighting"],"other"],
+      ["Jane","","Austen",["123 Hudson","","New York","NY","12100"],["furniture","kitchen"],"wordofmouth"]
+    ];
+
+    function initialize() {
+      form = document.getElementsByTagName("form")[0];
+      table = document.getElementById("descriptions");
+      contactManager = new ContactManager();
+      contactManager.fillTable();
+    } // end initialize
+      
+  </script>
+  <script src="../js/model/contact.js"></script>
+  <script src="../js/model/address.js"></script>
+  <script src="../js/contactManager.js"></script>
+  <script src="../js/navigation.js"></script>
+</head>
+
+<!-- 
+  Tags used: 
+    html, head, meta, title, body, h1, h2, h3, br, p, 
+    style, script, form, label input, button, select
+-->
+<body onload="createHeaderFooter(); initialize();">
+  <!-- require javascript-->
+  <noscript>
+    <p>
+      This web page uses JavaScript. For proper results,
+      you must use a web browser with JavaScript enabled.
+    </p>
+  </noscript>
+
+  <!-- ===============  HEADER  ============= -->
+  <div class="container" 
+       style="background-color:white;padding: 10px 20px; ">
+    <h2 class="center">Send a Fruit-Cake and a Catalog</h2>    
+  
+  <!-- ===============  CONTENT  ============= -->
+
+    <!-- Instructions -->
+    <h3 style="text-align:center">Instructions:</h3>
+    <p>
+      To add a new recipient, enter values in input boxes and click the
+      "Add" button.
+    </p>
+    <p>
+      To select an existing recipient, and display its data in input boxes,
+      in the table below, click anywhere on the row which identifies the
+      recipient. To alter a particular recipient's data, select it, change
+      displayed value(s) in input boxes, and click the "Replace" button.
+      To delete a recipient, select it and click the "Delete" button. 
+    </p>
+    <p>
+      The "Cancel" button clears all input-box entries and de-selects any
+      corresponding recipient.
+    </p>
+
+    <!-- the catalog request form-->
+    <div class="row"> 
+      <form>
+
+        <div id="left">
+
+          <fieldset>
+            <legend>Name:</legend>
+            <!-- first name -->
+            <label class="label-short" for="nameFirst">First:</label>
+            <input id="nameFirst" type="text" size="20" tabindex="1" required>
+            <span class="required">*</span><br>
+            
+            <!-- middle name -->
+            <label class="label-short" for="nameMiddle">Middle:</label>
+            <input id="nameMiddle" type="text" size="20" tabindex="2"><br>
+          
+            <!-- last name -->
+            <label class="label-short" for="nameLast">Last:</label>
+            <input id="nameLast" type="text" size="20" tabindex="3" required>
+            <span class="required">*</span>
+          </fieldset>
+
+          <fieldset>
+            <legend>Address:</legend>
+
+            <!-- Street 1 -->
+            <label class="label-short" for="street1">Street 1:</label>
+            <input id="street1" type="text" size="30" tabindex="4" required>
+            <span class="required">*</span><br>
+                    
+            <!-- Street 2 -->
+            <label class="label-short" for="street2">Street 2:</label>
+            <input id="street2" type="text" size="30" tabindex="5"><br>
+
+              <!-- City -->
+            <label class="label-short" for="city">City:</label>
+            <input id="city" type="text" size="20" tabindex="6" required>
+            <span class="required">*</span><br>
+
+            <!-- State -->
+            <label class="label-short" for="state">State:</label>
+            <select id="state" tabindex="7" required>
+              <option selected value>-- select a state --</option>
+              <option value="AL">Alabama</option>
+              <option value="AK">Alaska</option>
+              <option value="AZ">Arizona</option>
+              <option value="AR">Arkansas</option>
+              <option value="AS">American Samoa</option>
+              <option value="AA">Armed Forces Americas</option>
+              <option value="AP">Armed Forces Pacific</option>
+              <option value="AE">Armed Forces Others</option>
+              <option value="CA">California</option>
+              <option value="CO">Colorado</option>
+              <option value="CT">Connecticut</option>
+              <option value="DE">Delaware</option>
+              <option value="DC">District Of Columbia</option>
+              <option value="FL">Florida</option>
+              <option value="GA">Georgia</option>
+              <option value="GU">Guam</option>
+              <option value="HI">Hawaii</option>
+              <option value="ID">Idaho</option>
+              <option value="IL">Illinois</option>
+              <option value="IN">Indiana</option>
+              <option value="IA">Iowa</option>
+              <option value="KS">Kansas</option>
+              <option value="KY">Kentucky</option>
+              <option value="LA">Louisiana</option>
+              <option value="ME">Maine</option>
+              <option value="MD">Maryland</option>
+              <option value="MA">Massachusetts</option>
+              <option value="MI">Michigan</option>
+              <option value="MN">Minnesota</option>
+              <option value="MS">Mississippi</option>
+              <option value="MO">Missouri</option>
+              <option value="MT">Montana</option>
+              <option value="NE">Nebraska</option>
+              <option value="NV">Nevada</option>
+              <option value="NH">New Hampshire</option>
+              <option value="NJ">New Jersey</option>
+              <option value="NM">New Mexico</option>
+              <option value="NY">New York</option>
+              <option value="NC">North Carolina</option>
+              <option value="ND">North Dakota</option>
+              <option value="MP">Northern Mariana Islands</option>
+              <option value="OH">Ohio</option>
+              <option value="OK">Oklahoma</option>
+              <option value="OR">Oregon</option>
+              <option value="PA">Pennsylvania</option>
+              <option value="PR">Puerto Rico</option>
+              <option value="RI">Rhode Island</option>
+              <option value="SC">South Carolina</option>
+              <option value="SD">South Dakota</option>
+              <option value="TN">Tennessee</option>
+              <option value="TX">Texas</option>
+              <option value="UM">US Minor Outlying Islands</option>
+              <option value="UT">Utah</option>
+              <option value="VT">Vermont</option>
+              <option value="VI">Virgin Islands</option>
+              <option value="VA">Virginia</option>
+              <option value="WA">Washington</option>
+              <option value="WV">West Virginia</option>
+              <option value="WI">Wisconsin</option>
+              <option value="WY">Wyoming</option>
+            </select>				
+            <span class="required">*</span><br>
+
+            <!-- Zip -->
+            <label class="label-short" for="zip">Zip:</label>
+            <input id="zip" type="text" size="9" tabindex="8" required>
+            <span class="required">*</span><br>
+
+          </fieldset>
+        </div> <!-- end of left -->
+
+        <div id="right">
+
+          <fieldset>
+            <legend>Details</legend>
+
+            <!-- Areas of Interest -->
+            <label class="label-left" for="areasOfInterest">Areas of Interest:</label> <span class="required">*</span><br>
+            <select style="margin-left:65px;" id="areasOfInterest" size="5" tabindex="9" multiple>
+              <option value="appliances">Appliances</option>
+              <option value="furniture">Furniture</option>
+              <option value="kitchen">Kitchen & Cooking</option>
+              <option value="lighting">Lighting</option>
+              <option value="outback">Outback</option>
+            </select><br>
+
+            <!-- Referral-->
+            <label class="label-left">
+              How did you hear about us?:
+              <span class="required">*</span>
+            </label><br>
+            <label class="label-radiobutton" for="wordofmouth">
+            <input class="rbReferral" style="width:5px;padding:0;" type="radio" id="wordofmouth" name="referral" tabindex="10" value="wordofmouth">
+              Word of Mouth
+            </label>
+            <label class="label-radiobutton" for="newspaper">
+              <input class="rbReferral" style="width:5px;padding:0;" type="radio" id="newspaper" name="referral" tabindex="11" value="newspaper">
+              Newspaper
+            </label>
+            <label class="label-radiobutton" for="radio">
+              <input class="rbReferral" type="radio" id="radio" name="referral" tabindex="12" value="radio">
+              Radio
+            </label>
+            <label class="label-radiobutton" for="television">
+              <input class="rbReferral" type="radio" id="television" name="referral" tabindex="13" value="television">
+              Television
+            </label>
+            <label class="label-radiobutton" for="other">
+              <input class="rbReferral" type="radio" id="other" name="referral" tabindex="14" value="other">
+              Other
+            </label>
+          </fieldset>
+
+          <!-- the bottom buttons-->
+          <div>
+            <input type="button" value="Cancel" onclick="contactManager.cancel()"><br>
+            <input type="button" value="Add" onclick="contactManager.add()">
+            <input type="button" value="Replace" onclick="contactManager.replace()">
+            <input type="button" value="Delete" onclick="contactManager.delete()">
+          </div>
+
+        </div> <!-- end of right -->
+
+      </form>
+    </div> <!-- end of row-->
+
+    <!-- The recipient table -->
+    <div class="bottom-row"> 
+        <table id="descriptions">
+          <tr>
+            <th>First</th>
+            <th>Last</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip</th>
+          </tr>
+        </table>
+    </div>
+    <br>
+  </div>
+</body>
+</html>
