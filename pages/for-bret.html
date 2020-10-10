@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+  <title>for-bret</title>
+  <style>
+    canvas { 
+      border: 1px solid black;
+     }
+  </style>
+  <script>
+    function drawTextOnCanvas(form){
+      // get the canvas and context
+      var canvas =  document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+
+      //set the font and stroke attributes
+      ctx.font = "2em 'TimesNewRoman', serif";
+      ctx.textAlign = "center";
+      ctx.strokeStyle = "red";
+
+      // get the form text
+      var text = form.elements["textToDisplay"].value;
+      //var text = "fillText first"  
+      ctx.fillText(text, 150, 100);
+      ctx.strokeText(text, 150, 100); 
+    }
+  </script>
+</head>
+<body>
+  <form>
+    <label for="textToDisplay">Enter the text to display:</label>
+    <input id="textToDisplay" type="text" tabindex="1" autofocus>
+    <input type="button" value="submit" tabindex="2" onclick="drawTextOnCanvas(this.form)">
+  </form><br>
+  <canvas id="canvas" width="300" height="200"></canvas>
+</body>
+</html>
