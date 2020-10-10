@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
   <title>for-bret</title>
   <style>
@@ -19,7 +20,8 @@
 
       // get the form text
       var text = form.elements["textToDisplay"].value;
-      //var text = "fillText first"  
+
+      // draw the text with a border
       ctx.fillText(text, 150, 100);
       ctx.strokeText(text, 150, 100); 
     }
