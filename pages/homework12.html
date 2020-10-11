@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Michael Hepfer">
+  <meta name="description" content="Unit 7 Homework, CS-240, Fall 1 2020, Park University">
+  <meta name="keywords" content="Unit 7, javascript, forms, Fruit Cake">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michael Steven Home Furnishings - Homework 6 - Michael Hepfer</title>
+  <link rel="stylesheet" href="../css/default.css">
+
+  <style>
+    /* default paragraph style */
+    p {
+      background-color: papayawhip;
+      padding: 5px;
+      text-align: justify;
+      margin: 0px 10px;
+    }
+
+    /* content row layout*/
+    .row { 
+      max-width: 850px;
+      margin-right:  15px;
+      margin-left:  15px;
+      background-color: #ffffff;
+      padding-left: 20px;
+      padding-right: 20px;
+    } 
+
+    /* Left side style */
+    #left { 
+      width: 48%;
+      display: inline-block;
+      padding: 5px; 
+      color: #000000;
+      max-width: 400px;
+    } 
+
+    /* Right side */
+    #right { 
+      width: 48%;
+      float: right;
+      min-height: 475px;
+      padding: 5px; 
+    } 
+
+    /* label styling */
+    label{
+      text-align: right;
+      display: inline-block;
+      padding: 5px 0px;
+    }
+
+    .label-short {
+      width: 55px;
+    }
+
+    .label-medium {
+      width: 70px;
+    }
+
+    .label-long {
+      width: 180px;
+    }
+
+    .label-left {
+      text-align: left;
+      display: inline-block;
+      padding: 5px 0px;
+    }
+
+    .label-radiobutton {
+      display:block;
+      text-align:left;
+      height: 10px;
+    }
+
+    /* form input and select styling */
+    form {margin: 20px 0;}
+   
+    input {
+      border: 1px solid;
+      border-radius: 4px;
+      font-size: 1rem;
+      margin: 0.25rem;
+      min-width: 125px;
+      padding: 0.25rem;
+      transition: background-color 0.5s ease-out;
+    }
+
+    select {
+      border: 1px solid;
+      border-radius: 4px;
+      font-size: 1rem;
+      margin: 0.25rem;
+      min-width: 125px;
+      padding: 0.25rem;
+      transition: background-color 0.5s ease-out;
+    }
+    
+    select:invalid { background-color: rgb(255, 220, 220); }
+    input:invalid{ background-color: rgb(255, 220, 220); }
+
+    /* radio button styling */
+    input[type="radio"] {
+      width: 5px;
+      padding: 0px;
+    }
+   
+    .rbFruitCake {
+      display: inline-block;
+      width: 5px;
+      padding: 0;
+      margin: 0;
+    }
+
+    canvas { 
+      border: 1px solid black;
+    }
+  </style>
+
+  <script>
+    // global variables
+    var canvas;
+    var ctx;
+
+    /****************************************
+     * initializes the Fruit-Cake Order Manager
+     **************************************/
+    function initialize() { 
+      // get the canvas and context
+      canvas =  document.getElementById("canvas");
+      ctx = canvas.getContext("2d");
+      drawHouse( null, null, null);
+      writeText("This world needs coloring!");
+    } // end initialize
+    
+
+    /*************************************
+     * Reset Canvas
+     *************************************/
+    function resetCanvas(){
+       ctx.clearRect(0, 0, canvas.width, canvas.height);
+    } // resetCanvas
+
+
+    /**********************************
+     * Update the Groceries
+     ***********************************/
+    function updateGroceries(form){
+      ctx.fillStyle = "white";
+      ctx.fillRect (canvas.width- 250, 50,  200, 200);
+
+      //set the font and stroke attributes
+      ctx.font = "2em 'TimesNewRoman', serif";
+      ctx.textAlign = "left";
+      ctx.strokeStyle = "black";
+
+      // x size
+      var x = canvas.width - 240;
+
+      // draw the text with a border
+      ctx.fillStyle = "black";
+      ctx.fillText("Grocery List", x, 75);
+
+      // get the list of fruit
+      var fruit = form.elements.namedItem("fruit");
+      var y = 100;
+      ctx.font = "1em 'TimesNewRoman', serif";
+      for(let option of fruit.selectedOptions){ 
+        // write out the fruit
+        ctx.fillText( option.value, x, y );
+        y += 20; // move down for next item
+      }
+    } // end updateGroceries
+
+
+    /****************************************
+     *  drawOnCanvas
+     * 
+     * Fired on the Draw button onlclick
+     ***************************************/
+    function drawOnCanvas(form){
+      resetCanvas();
+      var houseColor = form.elements["houseColor"].value;
+      var roofColor = form.elements["roofColor"].value;
+      var doorColor = form.elements["doorColor"].value;
+
+      // draw the grass or snow based on the season
+      var ddlSeasons = form.elements["seasons"];
+      var season = ddlSeasons.options[ddlSeasons.selectedIndex].value;
+      if( "summer" == season ){
+        drawGrass();
+      } else{
+        drawSnow();
+      }
+      
+      // draw conditions
+      var rbConditions = form.elements["outsideConditions"];
+      for(i = 0; i < rbConditions.length; i++){
+        if( rbConditions[i].checked ){
+          drawConditions( rbConditions[i].value ) ;
+          break;
+        }
+      }
+
+      //draw the house
+      drawHouse(houseColor, roofColor, doorColor);
+
+      // write the text
+      var name = form.elements["houseName"].value;
+      writeText(name);
+    } // end drawOnCanvas
+
+
+    /************************************
+     * Draws the Grass
+     ***********************************/
+    function drawGrass() {
+      ctx.fillStyle = "green";
+      ctx.fillRect (0, canvas.height - 125,  canvas.width, canvas.height);
+    } // end drawGrass()
+
+
+    /***********************************
+     * Draws the Snow
+     **********************************/ 
+    function drawSnow(){
+      ctx.fillStyle = "#e6ffff";
+      ctx.fillRect (0, canvas.height - 125,  canvas.width, canvas.height);
+    }
+
+
+    /************************************
+     * Draws the conditions 
+     **********************************/
+    function drawConditions(condition){
+      switch(condition)
+      {
+        case "sunny":
+          ctx.fillStyle = "blue";
+          ctx.fillRect(0, 0,  canvas.width, canvas.height - 125);
+          drawSun();
+          break;
+        case "rainy":
+          ctx.fillStyle = "grey";
+          ctx.fillRect(0, 0,  canvas.width, canvas.height - 125);
+          break;
+        case "nightTime":
+          ctx.fillStyle="MidnightBlue";
+          ctx.fillRect(0, 0,  canvas.width, canvas.height - 125);
+          drawMoon();
+      }      
+    } // end drawConditions
+
+
+    /************************************
+     * Draws the sun 
+     ***********************************/ 
+    function drawSun(){
+      ctx.fillStyle = "yellow";
+      ctx.arc(100, 50, 40, 0, 2 * Math.PI);
+      ctx.fill();
+    } // end drawSun
+
+
+    /***********************************
+     * Draws the Moon
+     **********************************/
+    function drawMoon(){
+      // white part
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.arc(100, 60, 40, 0, 2 * Math.PI);
+      ctx.closePath();
+      ctx.fill();
+
+      // eclipse part of it
+      ctx.fillStyle = "MidnightBlue";
+      ctx.beginPath();
+      ctx.arc(120, 50, 40, 0, 2 * Math.PI);
+      ctx.closePath();
+      ctx.fill();
+    } // end drawMoon
+
+
+    /**************************************
+     *  Writes text centered below the house
+     ***************************************/
+    function writeText(text){
+
+      //set the font and stroke attributes
+      ctx.font = "2em 'TimesNewRoman', serif";
+      ctx.textAlign = "center";
+      ctx.strokeStyle = "red";
+
+      // determine text x,y
+      var x = canvas.width / 2;
+      var y = canvas.height - 25;
+
+      // draw the text with a border
+      ctx.fillText(text, x, y);
+      ctx.strokeText(text, x, y); 
+    } // end writeText
+
+
+    /**********************************
+    * Draw the house
+    **********************************/
+    function drawHouse(houseColor, roofColor, doorColor){
+      // set the line width and color
+      ctx.linewidth = "5";
+      ctx.strokeStyle= "black";
+
+      // top corners of the house
+      topLeftX = 200;
+      topRightX = 500;
+      topY = 125;
+
+      // bottom right corner of the house
+      bottomRightX = topRightX - topLeftX;
+      bottomRightY = 175;
+
+      // centerline of house
+      houseCenterX = topLeftX + ((topRightX - topLeftX) / 2)
+      houseCenterY = (bottomRightY/ 2) + topY
+
+      // draw the roof
+      ctx.beginPath();
+      ctx.moveTo(houseCenterX, 50);
+      ctx.lineTo(topLeftX, topY);
+      ctx.lineTo(topRightX, topY);
+      ctx.closePath();
+      if(null == roofColor){
+        ctx.fillStyle = "white";
+      } else {
+        ctx.fillStyle = roofColor;        
+      }
+      ctx.fill();
+      ctx.stroke();
+    
+      // draw the wall
+      if (null == houseColor ){
+        ctx.fillStyle = "white";
+      } else {
+        ctx.fillStyle = houseColor;
+      }
+      ctx.fillRect( topLeftX, topY, bottomRightX, bottomRightY);
+      ctx.strokeRect(topLeftX, topY, bottomRightX, bottomRightY);
+
+      // draw the Door
+      var doorWidth = 40
+      var doorTopLeftX = houseCenterX - (doorWidth/2);
+      var doorBottomRightY = (bottomRightY + topY) - houseCenterY
+      if(null == doorColor){
+        ctx.fillStyle = "white";
+      } else {
+        ctx.fillStyle = doorColor;
+      }
+      ctx.fillRect( doorTopLeftX, houseCenterY, doorWidth, doorBottomRightY );
+      ctx.strokeRect( doorTopLeftX, houseCenterY, doorWidth, doorBottomRightY );
+
+      // draw left window
+      var leftWindowCenterX = ( (doorTopLeftX - topLeftX ) / 2) + topLeftX;
+      var leftWindowTopLeftX = leftWindowCenterX - 15;
+      ctx.fillStyle = "white";
+      ctx.fillRect (leftWindowTopLeftX, houseCenterY, 30, 40 );
+      ctx.strokeRect (leftWindowTopLeftX, houseCenterY, 30, 40 );
+
+      // draw right window
+      var rightWallX = (topLeftX + bottomRightX);
+      var doorRightX = (doorTopLeftX + doorWidth);
+      var rightWindowCenterX = ( (rightWallX - doorRightX ) / 2) + doorRightX;
+      var rightWindowTopLeftX = rightWindowCenterX - 15;
+      ctx.fillStyle = "white";
+      ctx.fillRect (rightWindowTopLeftX, houseCenterY, 30, 40 );
+      ctx.strokeRect (rightWindowTopLeftX, houseCenterY, 30, 40 );
+   } // end drawHouse
+
+  </script>
+  <script src="../js/navigation.js"></script>
+</head>
+
+<!-- 
+  Tags used: 
+    html, head, meta, title, body, h1, h2, h3, br, p, table 
+    style, script, span, form, label input, button, select
+-->
+<body onload="createHeaderFooter(); initialize();">
+
+  <!-- require javascript-->
+  <noscript>
+    <p>
+      This web page uses JavaScript. For proper results,
+      you must use a web browser with JavaScript enabled.
+    </p>
+  </noscript>
+
+  <!-- ===============  HEADER  ============= -->
+  <div class="container" 
+       style="background-color:white;padding: 10px 20px;">
+    <h2 class="center">Color Your Grocery List:</h2>    
+  
+    <!-- ===============  CONTENT  ============= -->
+
+    <!-- Instructions -->
+    <h3 style="text-align:center">Instructions:</h3>
+
+    <!-- the canvas we will be drawing on -->
+    <canvas id="canvas" width="800" height="400"></canvas>
+
+    <!-- the form with house and fruit info -->
+    <div class="row"> 
+      <form>
+
+        <div id="left">
+
+          <fieldset>
+            <legend>House:</legend>
+            <!-- house name -->
+            <label class="label-short" for="houseName">Name:</label>
+            <input id="houseName" type="text" value="Home Sweet Home" size="20" tabindex="1" autofocus><br>
+
+            <!-- house color -->
+            <label class="label-short" for="houseColor">Wall Color:</label>
+            <input id="houseColor" type="color" value="#cc8800" tabindex="2"><br>
+          
+            <!-- roof color -->
+            <label class="label-short" for="roofColor">Roof Color:</label>
+            <input id="roofColor" value="#4d3300" type="color" tabindex="3"><br>
+
+            <!-- door color -->
+            <label class="label-short" for="doorColor">Door Color:</label>
+            <input id="doorColor" type="color" value="#fff7e6" tabindex="4"><br>
+          </fieldset>
+
+          <fieldset>
+            <legend>Outside Conditions</legend>
+              <!-- Sunny -->
+              <label class="label-radiobutton" for="sunny">
+              <input class="rbOutside" style="width:5px;padding:0;" type="radio" id="sunny" name="outsideConditions" tabindex="10" value="sunny" checked>
+                Sunny
+              </label>
+              <!-- Rainy -->
+              <label class="label-radiobutton" for="rainy">
+                <input class="rbOutside" type="radio" id="rainy" name="outsideConditions" tabindex="12" value="rainy">
+                Rainy
+              </label>
+              <!-- Night Time -->
+              <label class="label-radiobutton" for="nightTime">
+              <input class="rbOutside" style="width:5px;padding:0;" type="radio" id="nightTime" name="outsideConditions" tabindex="10" value="nightTime">
+                Night Time
+              </label>
+              <br> 
+              
+            <!-- State -->
+            <label class="label-short" for="seasons">Season:</label>
+            <select id="seasons" tabindex="7">
+              <option value="summer">Summer</option>
+              <option value="winter">Winter</option>
+            </select>			
+
+          </fieldset>
+        </div> <!-- end of left -->
+
+        <div id="right">
+
+          <fieldset>
+            <legend>Groceries:</legend>
+
+            <!-- Fruit to buy -->
+            <label class="label-left" for="fruit">Fruit to Buy:</label><br>
+            <select style="margin-left:65px;" id="fruit" size="5" tabindex="9" multiple>
+              <option value="Apples">Apples</option>
+              <option value="Banannas">Banannas</option>
+              <option value="Oranges">Oranges</option>
+              <option value="Peaches">Peaches</option>
+              <option value="Grapes">Grapes</option>
+            </select><br>
+
+          </fieldset>
+
+          <!-- the bottom buttons-->
+          <div>
+            <input type="button" value="Draw" onclick="drawOnCanvas(this.form);">
+            <input type="button" value="Reset" tabindex="14" onclick="resetCanvas()">
+            <input type="button" value="Display Groceries" tabindex="15" onclick="updateGroceries(this.form)">
+          </div>
+
+        </div> <!-- end of right -->
+
+      </form>
+    </div> <!-- end of row-->
+  </div>
+</body>
+</html>
